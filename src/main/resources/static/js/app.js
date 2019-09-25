@@ -1,7 +1,9 @@
 var Module = (function () {
 
-    var selectedAuthorName;
+    var selectedAuthorName = null;
+    var selectedBpName = null;
     var bpList=[];
+    var pointsToAdd=[];
 
     var updateList = function (BPs) {
             if(BPs){
@@ -45,6 +47,14 @@ var Module = (function () {
       })
 
     }
+    var getCursorPosition = function (canvas, event) {
+      const rect = canvas.getBoundingClientRect()
+      const x = event.clientX - rect.left
+      const y = event.clientY - rect.top
+      var ctx = canvas.getContext("2d");
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    }
 
     return {
       authorNameChanged: function () {
@@ -55,10 +65,55 @@ var Module = (function () {
       },
 
       drawBluePrint: function(bpName){
+        pointsToAdd = [];
+        selectedBpName = bpName;
         selectedAuthorName = document.getElementById("authorName").value;
+        document.getElementById("currentBlueprintName").innerHTML = selectedBpName;
 
         apiclient.getBlueprintsByNameAndAuthor(selectedAuthorName, bpName, draw);
 
+      },
+
+      init:function(){
+        var canvas = document.getElementById("myCanvas");
+        console.info('initialized');
+        
+        //if PointerEvent is suppported by the browser:
+        if(window.PointerEvent) {
+          canvas.addEventListener("pointerdown", function(e){
+            var x;
+            var y;
+            if (e.pageX || e.pageY) { 
+              x = e.pageX;
+              y = e.pageY;
+            }
+            else { 
+              x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft; 
+              y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop; 
+            } 
+            x -= canvas.offsetLeft;
+            y -= canvas.offsetTop;
+            if(selectedBpName != null){
+              /*pointsToAdd.push("{\"x\":"+x+",\"y\":"+y+"}");
+              ctx.lineTo(x, y);
+              ctx.stroke();
+              alert('pointerdown at '+x+','+y);*/
+              getCursorPosition(canvas, e)  
+            }
+            
+            
+          });
+        }
+        else {
+          canvas.addEventListener("mousedown", function(event){
+            if(selectedBpName != null){
+              alert('mousedown at '+event.clientX+','+event.clientY);  
+
+            }
+  
+            }
+          );
+        }
       }
       
     };
