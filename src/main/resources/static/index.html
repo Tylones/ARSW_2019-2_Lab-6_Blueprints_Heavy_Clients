@@ -1,0 +1,65 @@
+<head>
+    <title>Blueprints</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="js/apimock.js"></script>
+    <script src="js/apiclient.js"></script>
+    <script src="js/app.js"></script>
+
+</head>
+<body>
+    <h1>Blueprints</h1>
+    <div class="row">
+        <div class="col">
+            <label>Author :</label>
+            <input type="text" id="authorName" placeholder="Enter author name">
+            <button type="button" class="btn btn-secondary" onclick="Module.authorNameChanged()">Get Blueprints</button>
+        </div>
+    </div>
+    <div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="row">
+                <h3>
+                    <label id="authorsNameLabel">authorName</label>
+                    <label>'s blueprints :</label>
+                </h3>
+            </div>
+            <div class="row">
+                <table class="table table-striped" id="blueprintTable">
+                    <thead>
+                      <tr>
+                        <th>Blueprint name</th>
+                        <th>Number of points</th>
+                        <th>Open</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+            </div>
+            <div class="row">
+                <h3>
+                    <label>Total user points : </label>
+                    <label id="labelUserPoints">0</label>
+                </h3>
+            </div>
+        </div>
+        <div class="col">
+                <canvas id="myCanvas" width="500" height="500" style="border:1px solid #000000;">
+                    
+                </canvas>
+                
+            
+        </div>
+    </div>
+</div>
+
+</body>
