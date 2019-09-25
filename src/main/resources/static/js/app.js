@@ -1,13 +1,16 @@
 var Module = (function () {
 
     var selectedAuthorName = null;
-    var selectedBpName = null;
-    var bpList=[];
-    var pointsToAdd=[];
+
+    var selectedBp = {
+      author: null,
+      name: null,
+      points: []
+    }
 
     var updateList = function (BPs) {
             if(BPs){
-                document.getElementById("authorsNameLabel").innerHTML = selectedAuthorName;
+                document.getElementById("authorsNameLabel").innerHTML = selectedBp.author;
                 var newArray = BPs.map(function(val, index){
                     return {key:val.name, value:val.points.length}
                 })
@@ -27,6 +30,7 @@ var Module = (function () {
       };
 
     var draw = function (bp){
+      selectedBp = bp;
       var c = document.getElementById("myCanvas");
       var ctx = c.getContext("2d");
       ctx.save();
@@ -47,31 +51,59 @@ var Module = (function () {
       })
 
     }
+
     var getCursorPosition = function (canvas, event) {
       const rect = canvas.getBoundingClientRect()
       const x = event.clientX - rect.left
       const y = event.clientY - rect.top
       var ctx = canvas.getContext("2d");
+      selectedBp.points.push({x: x,y: y})
       ctx.lineTo(x, y);
       ctx.stroke();
     }
 
+    var blueprintPut = function (){
+      
+      var putPromise = $.ajax({
+        url: "/blueprints/"+selectedBp.author+"/"+selectedBp.name,
+        type: 'PUT',
+        data: JSON.stringify(selectedBp),
+        contentType: "application/json"
+      });
+
+      putPromise.then(
+        function () {
+          console.info("OK");
+        },
+        function () {
+            console.info("ERROR");
+        }
+      );
+
+      return putPromise;
+    }
+
     return {
       authorNameChanged: function () {
-        selectedAuthorName = document.getElementById("authorName").value;
+        selectedBp.author = document.getElementById("authorName").value;
         
 
-        apiclient.getBlueprintsByAuthor(selectedAuthorName,updateList);
+        apiclient.getBlueprintsByAuthor(selectedBp.author,updateList);
       },
 
       drawBluePrint: function(bpName){
-        pointsToAdd = [];
-        selectedBpName = bpName;
-        selectedAuthorName = document.getElementById("authorName").value;
-        document.getElementById("currentBlueprintName").innerHTML = selectedBpName;
+        selectedBp.name = bpName;
+        selectedBp.author = document.getElementById("authorName").value;
+        document.getElementById("currentBlueprintName").innerHTML = selectedBp.name;
 
-        apiclient.getBlueprintsByNameAndAuthor(selectedAuthorName, bpName, draw);
+        apiclient.getBlueprintsByNameAndAuthor(selectedBp.author, selectedBp.name, draw);
 
+      },
+
+      saveBlueprint: function(){
+        if(selectedBp.name != null && selectedBp.author != null){
+         blueprintPut(); 
+        }
       },
 
       init:function(){
@@ -81,19 +113,8 @@ var Module = (function () {
         //if PointerEvent is suppported by the browser:
         if(window.PointerEvent) {
           canvas.addEventListener("pointerdown", function(e){
-            var x;
-            var y;
-            if (e.pageX || e.pageY) { 
-              x = e.pageX;
-              y = e.pageY;
-            }
-            else { 
-              x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft; 
-              y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop; 
-            } 
-            x -= canvas.offsetLeft;
-            y -= canvas.offsetTop;
-            if(selectedBpName != null){
+
+            if(selectedBp.name != null){
               /*pointsToAdd.push("{\"x\":"+x+",\"y\":"+y+"}");
               ctx.lineTo(x, y);
               ctx.stroke();
@@ -106,8 +127,8 @@ var Module = (function () {
         }
         else {
           canvas.addEventListener("mousedown", function(event){
-            if(selectedBpName != null){
-              alert('mousedown at '+event.clientX+','+event.clientY);  
+            if(selectedBp.name != null){
+              getCursorPosition(canvas, e)   
 
             }
   
