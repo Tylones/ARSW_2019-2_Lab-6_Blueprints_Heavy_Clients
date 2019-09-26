@@ -131,3 +131,47 @@ modules.xml
 
 # End of https://www.gitignore.io/api/node,gradle,intellij+all
 
+
+bin/main/application.properties
+
+bin/main/edu/eci/_DS_Store
+
+bin/main/edu/eci/arsw/blueprints/controllers/BlueprintAPIController.class
+
+bin/main/edu/eci/arsw/blueprints/controllers/ResourceNotFoundException.class
+
+bin/main/edu/eci/arsw/blueprints/model/Blueprint.class
+
+bin/main/edu/eci/arsw/blueprints/model/Point.class
+
+bin/main/edu/eci/arsw/blueprints/persistence/BlueprintNotFoundException.class
+
+bin/main/edu/eci/arsw/blueprints/persistence/BlueprintPersistenceException.class
+
+bin/main/edu/eci/arsw/blueprints/persistence/BlueprintsPersistence.class
+
+bin/main/edu/eci/arsw/blueprints/persistence/impl/InMemoryBlueprintPersistence.class
+
+bin/main/edu/eci/arsw/blueprints/persistence/impl/Tuple.class
+
+bin/main/edu/eci/arsw/blueprints/services/BlueprintsServices.class
+
+bin/main/edu/eci/arsw/blueprintsapi/BlueprintsAPIApplication.class
+
+bin/main/static/index.html
+
+bin/main/static/js/apiclient.js
+
+bin/main/static/js/apimock.js
+
+bin/main/static/js/app.js
+
+target/blueprints-api-0.0.1-SNAPSHOT.jar
+
+target/blueprints-api-0.0.1-SNAPSHOT.jar.original
+
+target/classes/static/index.html
+
+target/classes/static/js/app.js
+
+target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
