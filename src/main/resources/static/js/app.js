@@ -1,6 +1,5 @@
 var Module = (function () {
 
-    var selectedAuthorName = null;
 
     var selectedBp = {
       author: null,
@@ -83,6 +82,21 @@ var Module = (function () {
       return putPromise;
     }
 
+    var blueprintGet = function(){
+      var getPromise = $.get("http://localhost:8080/blueprints/"+selectedBp.author);
+
+      getPromise.then(
+        function(data){
+          updateList(data)
+        },
+        function(){
+          console.log('get failed')
+        }
+      );
+
+      return getPromise;
+    }
+
     return {
       authorNameChanged: function () {
         selectedBp.author = document.getElementById("authorName").value;
@@ -102,7 +116,7 @@ var Module = (function () {
 
       saveBlueprint: function(){
         if(selectedBp.name != null && selectedBp.author != null){
-         blueprintPut(); 
+         blueprintPut().then(blueprintGet); 
         }
       },
 
