@@ -15,15 +15,16 @@
 
 </head>
 <body onLoad="Module.init()">
+    
+    <div class="container">
     <h1>Blueprints</h1>
     <div class="row">
-        <div class="col">
+        <div class="col form-inline">
             <label>Author :</label>
-            <input type="text" id="authorName" placeholder="Enter author name">
+            <input type="text" class="form-control" id="authorName" placeholder="Enter author name">
             <button type="button" class="btn btn-secondary" onclick="Module.authorNameChanged()">Get Blueprints</button>
         </div>
     </div>
-    <div class="container">
     <div class="row">
         <div class="col">
             <div class="row">
@@ -50,6 +51,9 @@
                     <label>Total user points : </label>
                     <label id="labelUserPoints">0</label>
                 </h3>
+            </div>
+            <div class="row">
+                <button type="button" class="btn btn-success" onclick="Module.createBlueprint()">Create new Blueprint</button> 
             </div>
         </div>
         <div class="col">

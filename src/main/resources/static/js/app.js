@@ -19,15 +19,13 @@ var Module = (function () {
                   var toAdd = '<tr><td>' + val.key + '</td><td>' + val.value + '</td><td><button type="button" class="btn btn-secondary" onclick="Module.drawBluePrint(this.value)" value="'+val.key+'">Draw '+ val.key + '</button></td></tr>';
                   $("#blueprintTable tbody").append(toAdd);
                 })
-
-                if (newArray.length == 1){
-                  document.getElementById("labelUserPoints").innerHTML = 1;
-                }else{
-                  var numberOfPoints = newArray.reduce(function(total, val){
-                    return total.value + val.value;
-                  })
-                  document.getElementById("labelUserPoints").innerHTML = numberOfPoints;
-                }
+                var a = 0;
+                var numberOfPoints = BPs.reduce(function(a, val){
+                  return a + val.points.length;
+                }, a);
+                  
+                document.getElementById("labelUserPoints").innerHTML = numberOfPoints;
+                
             }
       };
 
@@ -43,6 +41,8 @@ var Module = (function () {
 
       // Restore the transform
       ctx.restore();
+      ctx.beginPath();
+      
       bp.points.map(function(val,index){
         if(index==0){
           ctx.moveTo(val.x, val.y);
@@ -122,6 +122,26 @@ var Module = (function () {
       return deletePromise;
     }
 
+    var blueprintPost = function(){
+      var postPromise = $.ajax({
+        url: "/blueprints",
+        type: 'POST',
+        data: JSON.stringify(selectedBp),
+        contentType: "application/json"
+      });
+
+      postPromise.then(
+        function(){
+          console.info('Delete OK');
+        },
+        function(){
+          console.info('Delete NOK');
+        }
+      );
+
+      return postPromise;
+    }
+
     return {
       authorNameChanged: function () {
         selectedBp.author = document.getElementById("authorName").value;
@@ -139,6 +159,22 @@ var Module = (function () {
 
       },
 
+      createBlueprint: function(){
+        selectedBp.author = document.getElementById("authorName").value;
+        if(selectedBp.author == null){
+          alert('Author name can\'t be empty');
+        }
+        else{
+          selectedBp.name = prompt('Name of blueprint');
+          selectedBp.points = [];
+        }
+        blueprintPost().then(blueprintGet).then(function(){
+          document.getElementById("currentBlueprintName").innerHTML = selectedBp.name;
+        });
+
+      },
+
+
       saveBlueprint: function(){
         if(selectedBp.name != null && selectedBp.author != null){
          blueprintPut().then(blueprintGet); 
@@ -149,6 +185,18 @@ var Module = (function () {
         if(selectedBp.name != null && selectedBp.author != null){
           blueprintDelete().then(blueprintGet).then(function(){
             selectedBp.name = null;
+            document.getElementById("currentBlueprintName").innerHTML = 'None';
+            var c = document.getElementById("myCanvas");
+            var ctx = c.getContext("2d");
+            ctx.save();
+
+            // Use the identity matrix while clearing the canvas
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.clearRect(0, 0, c.width, c.height);
+
+            // Restore the transform
+            ctx.restore();
+            ctx.beginPath();
           });
         }
       },
