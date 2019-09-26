@@ -23,7 +23,7 @@ var Module = (function () {
                 var numberOfPoints = BPs.reduce(function(a, val){
                   return a + val.points.length;
                 }, a);
-                  
+
                 document.getElementById("labelUserPoints").innerHTML = numberOfPoints;
                 
             }
@@ -54,7 +54,7 @@ var Module = (function () {
 
     }
 
-    var getCursorPosition = function (canvas, event) {
+    var drawLineCanvas = function (canvas, event) {
       const rect = canvas.getBoundingClientRect()
       const x = event.clientX - rect.left
       const y = event.clientY - rect.top
@@ -204,31 +204,20 @@ var Module = (function () {
       init:function(){
         var canvas = document.getElementById("myCanvas");
         console.info('initialized');
-        
         //if PointerEvent is suppported by the browser:
         if(window.PointerEvent) {
           canvas.addEventListener("pointerdown", function(e){
-
             if(selectedBp.name != null){
-              /*pointsToAdd.push("{\"x\":"+x+",\"y\":"+y+"}");
-              ctx.lineTo(x, y);
-              ctx.stroke();
-              alert('pointerdown at '+x+','+y);*/
-              getCursorPosition(canvas, e)  
+              drawLineCanvas(canvas, e)  
             }
-            
-            
           });
         }
         else {
           canvas.addEventListener("mousedown", function(event){
             if(selectedBp.name != null){
-              getCursorPosition(canvas, e)   
-
+              drawLineCanvas(canvas, e)   
             }
-  
-            }
-          );
+          });
         }
       }
       
