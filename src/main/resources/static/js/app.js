@@ -20,11 +20,14 @@ var Module = (function () {
                   $("#blueprintTable tbody").append(toAdd);
                 })
 
-                var numberOfPoints = newArray.reduce(function(total, val){
-                  return total.value + val.value;
-                })
-
-                document.getElementById("labelUserPoints").innerHTML = numberOfPoints;
+                if (newArray.length == 1){
+                  document.getElementById("labelUserPoints").innerHTML = 1;
+                }else{
+                  var numberOfPoints = newArray.reduce(function(total, val){
+                    return total.value + val.value;
+                  })
+                  document.getElementById("labelUserPoints").innerHTML = numberOfPoints;
+                }
             }
       };
 
