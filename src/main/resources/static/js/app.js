@@ -90,6 +90,9 @@ var Module = (function () {
           updateList(data)
         },
         function(){
+          document.getElementById("authorsNameLabel").innerHTML = selectedBp.author;
+          $("#blueprintTable tbody").empty();
+          document.getElementById("labelUserPoints").innerHTML = 0;
           console.log('get failed')
         }
       );
@@ -97,12 +100,31 @@ var Module = (function () {
       return getPromise;
     }
 
+    var blueprintDelete = function(){
+      var deletePromise = $.ajax({
+        url: "/blueprints/"+selectedBp.author+"/"+selectedBp.name,
+        type: 'DELETE',
+        contentType: "application/json"
+      });
+
+      deletePromise.then(
+        function(){
+          console.info('Delete OK');
+        },
+        function(){
+          console.info('Delete NOK');
+        }
+      );
+
+      return deletePromise;
+    }
+
     return {
       authorNameChanged: function () {
         selectedBp.author = document.getElementById("authorName").value;
         
 
-        apiclient.getBlueprintsByAuthor(selectedBp.author,updateList);
+        blueprintGet().then();
       },
 
       drawBluePrint: function(bpName){
@@ -117,6 +139,14 @@ var Module = (function () {
       saveBlueprint: function(){
         if(selectedBp.name != null && selectedBp.author != null){
          blueprintPut().then(blueprintGet); 
+        }
+      },
+
+      deleteBlueprint: function(){
+        if(selectedBp.name != null && selectedBp.author != null){
+          blueprintDelete().then(blueprintGet).then(function(){
+            selectedBp.name = null;
+          });
         }
       },
 
