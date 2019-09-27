@@ -61,7 +61,7 @@ var selectedBp = {
 
 ## Save Button
 
-To update a blueprint, I simply 
+To update a blueprint, I simply used a Javascript promise : 
 
 
 ```js
@@ -87,3 +87,15 @@ var blueprintPut = function (){
 }
 
 ```
+
+
+To update the list of blueprints after saving, I used a series of javascript promises : 
+
+```js 
+saveBlueprint: function(){
+    if(selectedBp.name != null && selectedBp.author != null){
+        blueprintPut().then(blueprintGet); 
+    }
+},
+```
+
